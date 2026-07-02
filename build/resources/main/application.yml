@@ -1,0 +1,50 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  profiles:
+    active: local
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+server:
+  port: ${PORT:8080}
+
+# Swagger
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui/index.html
+    display-request-duration: true
+    operations-sorter: method
+
+---
+# local profile (SQL 설치 없이 메모리 DB로 실행)
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;NON_KEYWORDS=USER
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    show-sql : true
+    hibernate:
+      ddl-auto: update
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.H2Dialect
+
+Logging:
+  level:
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
